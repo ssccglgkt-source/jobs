@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Job Portal – Gaurav Sir</title>
+<style>
+:root{--bg:#000;--card:#111;--line:#2a2a2a;--tx:#fff;--mut:#b5b5b5;--or:#ff7a00;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans Devanagari",sans-serif;line-height:1.5}
+header{padding:20px 16px;border-bottom:2px solid var(--or)}
+h1{margin:0;font-size:1.6rem}
+h1 span{color:var(--or)}
+.sub{color:var(--mut);font-size:.9rem;margin-top:4px}
+main{display:grid;grid-template-columns:2fr 1fr;gap:16px;padding:16px;max-width:1200px;margin:auto}
+@media(max-width:820px){main{grid-template-columns:1fr}}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.tab{background:var(--card);color:var(--tx);border:1px solid var(--or);padding:10px 14px;border-radius:8px;font-size:.95rem;cursor:pointer}
+.tab.on{background:var(--or);color:#000;font-weight:700}
+.tab small{opacity:.8}
+input{width:100%;padding:10px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--tx);margin-bottom:12px;font-size:1rem}
+.job{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--or);border-radius:10px;padding:12px 14px;margin-bottom:10px}
+.job h3{margin:0 0 6px;font-size:1.05rem}
+.row{display:flex;flex-wrap:wrap;gap:8px 16px;font-size:.88rem;color:var(--mut)}
+.pill{background:var(--or);color:#000;font-weight:700;border-radius:20px;padding:2px 10px;font-size:.85rem}
+.note{font-size:.82rem;color:var(--mut);margin-top:6px}
+a.btn{display:inline-block;margin-top:8px;background:var(--or);color:#000;text-decoration:none;font-weight:700;padding:6px 12px;border-radius:6px;font-size:.88rem}
+.dl{color:var(--or);font-weight:700}
+aside{background:var(--card);border:1px solid var(--or);border-radius:12px;padding:14px;align-self:start}
+aside h2{margin:0 0 10px;color:var(--or);font-size:1.15rem}
+.ben{border-top:1px solid var(--line);padding:10px 0;font-size:.92rem}
+.ben a{color:var(--or)}
+.empty{color:var(--mut);padding:16px;border:1px dashed var(--line);border-radius:10px}
+footer{color:var(--mut);font-size:.8rem;padding:16px;text-align:center}
+</style>
+</head>
+<body>
+<header>
+<h1>Welcome <span id="nm"></span> Sir</h1>
+<div class="sub">Job Portal &bull; अपडेट: <span id="upd"></span></div>
+</header>
+<main>
+<section>
+<div class="tabs" id="tabs"></div>
+<input id="q" placeholder="जॉब सर्च करें...">
+<div id="list"></div>
+</section>
+<aside>
+<h2>सरकारी योजनाएँ और बेनिफिट</h2>
+<div id="ben"></div>
+</aside>
+</main>
+<footer>जॉब भरने से पहले हमेशा आधिकारिक नोटिफिकेशन खुद जाँच लें।</footer>
+<script>
+var NAME="Gaurav";
+var UPDATED="21 Nov 2026";
+var BLOCK=/agniveer|agnipath|\bcds\b|afcat|\barmy\b|\bnavy\b|air force/i;
+// kind: gov | offline | private ; pwbd = उस जॉब में PwBD की वैकेंसी (0 हो तो शो नहीं होगी)
+var JOBS=[
+{manual:1,kind:"gov",title:"BPCL Special Recruitment Drive – Associate/Junior Executive",org:"Bharat Petroleum (PSU)",pwbd:49,posts:"49 (सभी PwBD)",last:"2026-11-29",link:"https://www.bharatpetroleum.in",note:"3 से 5 साल का अनुभव ज़रूरी है। CBT 19 Dec (संभावित)।"},
+{manual:1,kind:"offline",title:"Hyderabad District PwBD Backlog – Junior Assistant, Office Subordinate, Sweeper आदि",org:"DEPwD, Hyderabad (तेलंगाना)",pwbd:83,posts:"83",last:"2026-12-02",link:"https://naukripatra.in/hyderabad-district-pwbd-backlog-posts-recruitment-2026/",note:"ऑफलाइन फॉर्म, 2 Dec शाम 5 बजे तक ऑफिस पहुँचना चाहिए। Junior Assistant के लिए डिग्री + कंप्यूटर। हर पोस्ट की दिव्यांग कैटेगरी (OH आदि) और निवास की शर्त नोटिफिकेशन में जाँचें।"},
+{manual:1,kind:"offline",title:"HPPWD Special Drive – JE, Junior Draughtsman, Junior Office Assistant (IT)",org:"HP PWD, शिमला (हिमाचल)",pwbd:22,posts:"22 (15 JOA-IT)",last:"2026-12-15",link:"https://himachaljobs.in/hppwd-recruitment-2026/",note:"सिर्फ हिमाचल के निवासी आवेदन कर सकते हैं। डाक या हाथ से फॉर्म, 15 Dec (ट्राइबल एरिया 26 Dec) तक पहुँचना ज़रूरी।"},
+{kind:"gov",title:"Assistant Superintendent (Personal Secretary), Assistant Superintendent (Stores/Commercial)",org:"GSL",pwbd:1,posts:"4 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-12-24",link:"https://www.freejobalert.com/articles/gsl-recruitment-2026-assistant-superintendent-3083393"},
+{kind:"gov",title:"Engineer, Manager and More",org:"BEML",pwbd:1,posts:"83 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-12-03",link:"https://www.freejobalert.com/articles/beml-executive-recruitment-2026-3083386"},
+{kind:"gov",title:"Staff Nurse",org:"Tirupathur District Health Society",pwbd:1,posts:"54 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-12-04",link:"https://www.freejobalert.com/articles/tirupathur-district-health-society-staff-nurse-recruitment-2026-3083373"},
+{kind:"gov",title:"General, Specialist Stream",org:"SIDBI",pwbd:1,posts:"68 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-12-11",link:"https://www.freejobalert.com/articles/sidbi-grade-a-b-recruitment-2026-3083361"},
+{kind:"gov",title:"Lower Division Clerk",org:"IHMCT",pwbd:1,posts:"2 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-11-30",link:"https://www.freejobalert.com/articles/ihmct-lower-division-clerk-recruitment-2026-3077433"},
+{kind:"gov",title:"Chief General Manager, Manager and More",org:"NSIC",pwbd:1,posts:"41 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-12-14",link:"https://www.freejobalert.com/articles/nsic-recruitment-2026-chief-general-manager-manager-3083348"},
+{kind:"gov",title:"General Manager, Deputy General Manager and More",org:"NSIC",pwbd:1,posts:"42 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-12-14",link:"https://www.freejobalert.com/articles/nsic-recruitment-2026-general-manager-deputy-general-manager-3083346"},
+{kind:"gov",title:"AI Specialist Officer, AI Engineer and More",org:"Indian Bank",pwbd:1,posts:"8 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-12-01",link:"https://www.freejobalert.com/articles/indian-bank-recruitment-2026-ai-specialist-officer-ai-engineer-3083304"},
+{kind:"gov",title:"Project Manager, Engineer and More",org:"BECIL",pwbd:1,posts:"5 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-12-05",link:"https://www.freejobalert.com/articles/becil-recruitment-2026-apply-online-for-5-project-manager-engineer-and-more-posts-3083197"},
+{kind:"gov",title:"MTS, Driver and More",org:"CSIR",pwbd:1,posts:"29 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-12-21",link:"https://www.freejobalert.com/articles/csir-recruitment-2026-mts-driver-3083131"},
+{kind:"gov",title:"LDC, Accountant and More",org:"DH&FWS Birbhum",pwbd:1,posts:"52 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-12-05",link:"https://www.freejobalert.com/articles/dh-fws-birbhum-recruitment-2026-apply-online-for-52-ldc-accountant-and-more-posts-3083161"},
+{kind:"gov",title:"Technical Assistant, Weaving Supervisor and More",org:"OSSC",pwbd:1,posts:"132 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-12-28",link:"https://www.freejobalert.com/articles/ossc-recruitment-2026-technical-assistant-weaving-supervisor-3082735"},
+{kind:"gov",title:"Data Scientist, Chief Manager and More",org:"SBI",pwbd:1,posts:"20 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-12-10",link:"https://www.freejobalert.com/articles/sbi-recruitment-2026-data-scientist-chief-manager-3083056"},
+{kind:"gov",title:"Medico Laboratory Technician Apprentice, Radiology Technician Apprentice",org:"MbPA",pwbd:1,posts:"7 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-12-18",link:"https://www.freejobalert.com/articles/mbpa-recruitment-2026-radiology-technician-apprentice-3083024"},
+{kind:"gov",title:"Executive Engineer, Deputy General Manager and More",org:"NLC India",pwbd:1,posts:"145 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-12-19",link:"https://www.freejobalert.com/articles/nlc-india-executive-recruitment-2026-3081657"},
+{kind:"gov",title:"Senior Technical Assistant (Draftsman/Buildings)",org:"RITES",pwbd:1,posts:"6 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-12-15",link:"https://www.freejobalert.com/articles/rites-recruitment-2026-senior-technical-assistant-draftsman-buildings-3082922"},
+{kind:"gov",title:"Technical Assistant & Technician-I",org:"RITES",pwbd:1,posts:"8 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-12-15",link:"https://www.freejobalert.com/articles/rites-recruitment-2026-apply-online-for-8-technical-assistant-technician-posts-3082727"},
+{kind:"gov",title:"Security Assistant",org:"CSIR-SERC",pwbd:1,posts:"1 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-12-21",link:"https://www.freejobalert.com/articles/csir-serc-security-assistant-recruitment-2026-3082900"},
+{kind:"gov",title:"Laboratory Assistant, Associate Professor and More",org:"NFSU",pwbd:1,posts:"42 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-12-02",link:"https://www.freejobalert.com/articles/nfsu-recruitment-2026-apply-online-for-42-laboratory-assistant-associate-professor-and-more-posts-3082874"},
+{kind:"gov",title:"Technical Assistant and Senior Technical Assistant",org:"ASRB",pwbd:1,posts:"1393 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-12-17",link:"https://www.freejobalert.com/articles/asrb-recruitment-2026-apply-online-for-1393-posts-3080372"},
+{kind:"offline",title:"Cook, Helper and More",org:"BCW&TD Purulia",pwbd:1,posts:"6 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-12-07",link:"https://www.freejobalert.com/articles/bcw-td-purulia-recruitment-2026-apply-offline-for-6-cook-helper-and-more-posts-3082725"},
+{kind:"gov",title:"Field Engineer",org:"NSPCL",pwbd:1,posts:"17 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-12-04",link:"https://www.freejobalert.com/articles/nspcl-field-engineer-recruitment-2026-apply-online-for-17-posts-3082541"},
+{kind:"gov",title:"Pharmacist, Staff Nurse and More",org:"DH&FWS Purulia",pwbd:1,posts:"108 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-12-02",link:"https://www.freejobalert.com/articles/dh-fws-purulia-recruitment-2026-apply-online-for-108-pharmacist-staff-nurse-and-more-posts-3082524"},
+{kind:"gov",title:"Textile Inspector",org:"KEA",pwbd:1,posts:"5 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-12-16",link:"https://www.freejobalert.com/articles/kea-textile-inspector-recruitment-2026-3082490"},
+{kind:"gov",title:"Computer Operator and Programming Assistant",org:"Mumbai Port Authority",pwbd:1,posts:"96 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-12-18",link:"https://www.freejobalert.com/articles/mumbai-port-authority-computer-operator-and-programming-assistant-recruitment-2026-3082445"},
+{kind:"gov",title:"Forest Guard",org:"Karnataka Forest Department",pwbd:1,posts:"95 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-12-22",link:"https://www.freejobalert.com/articles/karnataka-forest-department-forest-guard-recruitment-2026-3082441"},
+{kind:"gov",title:"Chief Engineer (Dist.)",org:"MSEDCL",pwbd:1,posts:"4 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-12-04",link:"https://www.freejobalert.com/articles/msedcl-chief-engineer-dist-recruitment-2026-3082393"},
+{kind:"gov",title:"Graduate Apprentice (Engineering), Technician Apprentice",org:"JCSTI",pwbd:1,posts:"6 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-12-01",link:"https://www.freejobalert.com/articles/jcsti-recruitment-2026-technician-apprentice-graduate-apprentice-3081942"},
+{kind:"gov",title:"Security Officer, Biomedical Engineer and More",org:"AIIMS Deoghar",pwbd:1,posts:"4 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-12-18",link:"https://www.freejobalert.com/articles/aiims-deoghar-recruitment-2026-security-officer-3082324"},
+{kind:"gov",title:"Senior Executive, Deputy Executive, and Assistant Executive",org:"RECPDCL",pwbd:1,posts:"32 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-11-24",link:"https://www.freejobalert.com/articles/recpdcl-recruitment-2026-apply-online-for-32-senior-executive-deputy-executive-and-more-posts-3076364"},
+{kind:"gov",title:"Assistant Public Prosecutor-cum-Assistant Government Pleader",org:"KEA",pwbd:1,posts:"52 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-12-15",link:"https://www.freejobalert.com/articles/kea-assistant-public-prosecutor-cum-assistant-government-pleader-recruitment-2026-apply-online-for-52-posts-3082246"},
+{kind:"gov",title:"Steno, Deputy Registrar and More",org:"AUD Delhi",pwbd:1,posts:"6 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-12-08",link:"https://www.freejobalert.com/articles/aud-delhi-recruitment-2026-apply-online-for-6-steno-deputy-registrar-and-more-posts-3082173"},
+{kind:"gov",title:"Chief Fire Officer, Instrumentation Technician",org:"SMC",pwbd:1,posts:"18 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-12-02",link:"https://www.freejobalert.com/articles/smc-recruitment-2026-apply-online-for-18-chief-fire-officer-instrumentation-technician-posts-3082150"},
+{kind:"gov",title:"Junior Engineer",org:"RSSB",pwbd:1,posts:"1909 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-12-17",link:"https://www.freejobalert.com/articles/rssb-junior-engineer-recruitment-2026-apply-online-for-874-posts-3063198"},
+{kind:"gov",title:"Assistant Section Officer (Group-B)",org:"OPSC",pwbd:1,posts:"340 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-11-30",link:"https://www.freejobalert.com/articles/opsc-assistant-section-officer-group-b-recruitment-2026-3079059"},
+{kind:"gov",title:"Lower Division Clerk",org:"Central University of Rajasthan",pwbd:1,posts:"1 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-12-20",link:"https://www.freejobalert.com/articles/central-university-of-rajasthan-non-teaching-recruitment-2026-apply-online-for-lower-division-clerk-posts-3075253"},
+{kind:"gov",title:"Graduate (Degree) Apprentice, Diploma Apprentice",org:"HAL",pwbd:1,posts:"2 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-12-07",link:"https://www.freejobalert.com/articles/hal-recruitment-2026-graduate-apprentice-diploma-apprentice-3081904"},
+{kind:"gov",title:"Graduate Apprentice",org:"BEL",pwbd:1,posts:"15 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-11-30",link:"https://www.freejobalert.com/articles/bel-recruitment-2026-graduate-apprentice-3081884"},
+{kind:"gov",title:"Act Apprentice",org:"RRC Central Railway",pwbd:1,posts:"2861 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-12-02",link:"https://www.freejobalert.com/articles/rrc-central-railway-act-apprentice-recruitment-2026-3078343"},
+{kind:"gov",title:"FTA Grade III Official Language Translator (Hindi Translator)",org:"BHEL",pwbd:1,posts:"1 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-12-01",link:"https://www.freejobalert.com/articles/bhel-hindi-translator-recruitment-2026-apply-online-3077143"},
+{kind:"gov",title:"Research Assistant, Accountant and More",org:"CCPD",pwbd:1,posts:"3 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-12-17",link:"https://www.freejobalert.com/articles/ccpd-recruitment-2026-research-assistant-accountant-3081859"},
+{kind:"gov",title:"Assistant",org:"Delhi University",pwbd:1,posts:"215 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-11-30",link:"https://www.freejobalert.com/articles/delhi-university-assistant-recruitment-2026-3077134"},
+{kind:"offline",title:"Catering Officer, Deputy Manager and More",org:"Mumbai Port Authority",pwbd:1,posts:"6 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-11-30",link:"https://www.freejobalert.com/articles/mumbai-port-authority-recruitment-2026-apply-offline-for-6-catering-officer-deputy-manager-and-more-posts-3073457"},
+{kind:"gov",title:"Account Assistant, Programme Assistant and More",org:"NAM",pwbd:1,posts:"3 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-11-27",link:"https://www.freejobalert.com/articles/nam-recruitment-2026-account-assistant-programme-assistant-3081621"},
+{kind:"gov",title:"Peon, Typist and More",org:"Kalaburagi District Court",pwbd:1,posts:"29 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-12-15",link:"https://www.freejobalert.com/articles/kalaburagi-district-court-recruitment-2026-apply-online-for-29-peon-typist-and-more-posts-3081515"},
+{kind:"offline",title:"Manager, Senior Manager",org:"AVNL",pwbd:1,posts:"3 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-12-10",link:"https://www.freejobalert.com/articles/avnl-recruitment-2026-apply-offline-for-3-manager-senior-manager-posts-3081326"},
+{kind:"gov",title:"Constable, SI and other posts",org:"Manipur Police",pwbd:1,posts:"2698 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-12-10",link:"https://www.freejobalert.com/articles/manipur-police-recruitment-2026-2698-constable-si-and-other-posts-3079176"},
+{kind:"gov",title:"Multi Tasking Staff",org:"CSIR-NPL",pwbd:1,posts:"25 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-12-23",link:"https://www.freejobalert.com/articles/csir-npl-multi-tasking-staff-recruitment-2026-3081095"},
+{kind:"gov",title:"Typist",org:"District Court Jayashankar Bhupalpally",pwbd:1,posts:"1 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-11-28",link:"https://www.freejobalert.com/articles/district-court-jayashankar-bhupalpally-typist-recruitment-2026-3081059"},
+{kind:"gov",title:"General Manager, Executive and More",org:"NTPC",pwbd:1,posts:"12 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-11-27",link:"https://www.freejobalert.com/articles/ntpc-recruitment-2026-apply-online-for-12-general-manager-executive-posts-3081048"},
+{kind:"gov",title:"Data Entry Operator",org:"HARTRON",pwbd:1,posts:"110 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-11-22",link:"https://www.freejobalert.com/articles/hartron-deo-recruitment-2026-3080450"},
+{kind:"gov",title:"Officer (HR)",org:"CCI",pwbd:1,posts:"2 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-11-28",link:"https://www.freejobalert.com/articles/cci-officer-hr-recruitment-2026-3080917"},
+{kind:"gov",title:"Senior / Junior Assistant, Technician and More",org:"MANIT Bhopal",pwbd:1,posts:"55 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-12-10",link:"https://www.freejobalert.com/articles/manit-bhopal-non-teaching-recruitment-2026-3080459"},
+{kind:"gov",title:"Technician Apprentice, Graduate Apprentice and More",org:"IOCL",pwbd:1,posts:"409 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-12-12",link:"https://www.freejobalert.com/articles/iocl-eastern-region-apprentice-recruitment-2026-3080655"},
+{kind:"gov",title:"Anganwadi Worker, Anganwadi Helper",org:"DWCD Bidar",pwbd:1,posts:"441 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-12-11",link:"https://www.freejobalert.com/articles/dwcd-bidar-recruitment-2026-apply-online-for-441-anganwadi-worker-anganwadi-helper-posts-3080778"},
+{kind:"gov",title:"Junior Engineer and Multi-Tasking Staff",org:"DSSSB",pwbd:1,posts:"1260 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-12-11",link:"https://www.freejobalert.com/articles/dsssb-recruitment-2026-apply-online-for-mts-junior-engineer-posts-3079318"},
+{kind:"gov",title:"Junior Grade Typist / Data Entry Operator",org:"Orissa High Court",pwbd:1,posts:"31 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-12-07",link:"https://www.freejobalert.com/articles/high-court-of-orissa-junior-grade-typist-data-entry-recruitment-2026-3080446"},
+{kind:"gov",title:"Junior Stenographer (Group C)",org:"Orissa High Court",pwbd:1,posts:"33 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-12-07",link:"https://www.freejobalert.com/articles/orissa-high-court-junior-stenographer-group-c-recruitment-2026-3080444"},
+{kind:"gov",title:"Clerk-Typist, Staff Nurse and More",org:"MPSC",pwbd:1,posts:"देखें",last:"2026-11-27",link:"https://www.freejobalert.com/articles/mpsc-group-c-recruitment-2026-3080387"},
+{kind:"gov",title:"ATM, BTM, Computer Programmer and More",org:"AAU",pwbd:1,posts:"310 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-12-11",link:"https://www.freejobalert.com/articles/aau-recruitment-2026-accountant-cum-clerk-computer-programmer-3080148"},
+{kind:"gov",title:"Junior Accountant, Assistant Section Officer and More",org:"APPSC",pwbd:1,posts:"720 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-12-11",link:"https://www.freejobalert.com/articles/appsc-group-ii-recruitment-2026-3073316"},
+{kind:"gov",title:"Store Keeper cum Clerk, Farm Clerk and More",org:"UPSSSC",pwbd:1,posts:"1784 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-12-01",link:"https://www.freejobalert.com/articles/upssc-combined-lower-subordinate-services-intermediate-level-main-examination-2026-3074209"},
+{kind:"gov",title:"Assistant Section Officer, Assistant Caretaker",org:"Bihar Vidhan Sabha",pwbd:1,posts:"54 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-11-27",link:"https://www.freejobalert.com/articles/bihar-vidhan-sabha-recruitment-2026-assistant-caretaker-3079745"},
+{kind:"gov",title:"MTS, Scientific Assistant and More",org:"GSPCB",pwbd:1,posts:"8 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-11-30",link:"https://www.freejobalert.com/articles/gspcb-recruitment-2026-mts-scientific-assistant-laboratory-attendant-3079514"},
+{kind:"gov",title:"Nayab Tehsildar, Excise Inspector and More",org:"UKPSC",pwbd:1,posts:"54 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-11-26",link:"https://www.freejobalert.com/articles/ukpsc-lower-pcs-recruitment-2026-3079327"},
+{kind:"gov",title:"Industrial Development Officer",org:"WBPSC",pwbd:1,posts:"247 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-11-26",link:"https://www.freejobalert.com/articles/wbpsc-ido-recruitment-2026-3078772"},
+{kind:"gov",title:"Executive Trainee",org:"DVC",pwbd:1,posts:"108 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-12-06",link:"https://www.freejobalert.com/articles/dvc-recruitment-2026-executive-trainee-3079288"},
+{kind:"gov",title:"Technician Apprentice, Trade Apprentice and More",org:"IOCL",pwbd:1,posts:"500 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-12-05",link:"https://www.freejobalert.com/articles/iocl-apprentice-recruitment-2026-3079245"},
+{kind:"gov",title:"Block Technology Manager, Assistant Technology Manager",org:"Manipur Agriculture Department",pwbd:1,posts:"138 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-11-26",link:"https://www.freejobalert.com/articles/manipur-agriculture-department-recruitment-2026-apply-online-for-138-block-technology-manager-and-assistant-technology-manager-posts-3079222"},
+{kind:"gov",title:"Apprentices",org:"Indian Bank",pwbd:1,posts:"1500 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-11-25",link:"https://www.freejobalert.com/articles/indian-bank-apprentices-recruitment-2026-3078364"},
+{kind:"gov",title:"Deputy Town Planner, Assistant Town Planner",org:"SMC",pwbd:1,posts:"70 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-11-30",link:"https://www.freejobalert.com/articles/smc-recruitment-2026-apply-online-for-70-deputy-town-planner-assistant-town-planner-posts-3079154"},
+{kind:"gov",title:"Block Accountant cum MIS Assistant, Block Manager and More",org:"OLM",pwbd:1,posts:"1115 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-12-05",link:"https://www.freejobalert.com/articles/olm-recruitment-2026-block-accountant-cum-mis-assistant-3079147"},
+{kind:"offline",title:"Staff Nurse, Pharmacist and More",org:"DHS Ramgarh",pwbd:1,posts:"32 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-11-27",link:"https://www.freejobalert.com/articles/dhs-ramgarh-recruitment-2026-apply-offline-for-32-staff-nurse-pharmacist-and-more-posts-3079007"},
+{kind:"gov",title:"Peon",org:"Vijayapura District Court",pwbd:1,posts:"30 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-12-04",link:"https://www.freejobalert.com/articles/vijayapura-district-court-peon-recruitment-2026-apply-online-for-30-posts-3078968"},
+{kind:"gov",title:"Female Supervisor",org:"KEA",pwbd:1,posts:"30 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-11-28",link:"https://www.freejobalert.com/articles/kea-female-supervisor-recruitment-2026-apply-online-for-30-posts-3078924"},
+{kind:"gov",title:"Scouts and Guides Quota",org:"RRC Northern Railway",pwbd:1,posts:"27 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-12-06",link:"https://www.freejobalert.com/articles/rrc-nr-scouts-and-guides-quota-recruitment-2026-apply-online-for-27-group-c-and-group-d-posts-3078775"},
+{kind:"gov",title:"Anganwadi Worker, Anganwadi Helper",org:"Chamarajanagar District",pwbd:1,posts:"390 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-12-04",link:"https://www.freejobalert.com/articles/chamarajanagar-anganwadi-recruitment-2026-apply-online-for-390-anganwadi-helper-anganwadi-worker-posts-3078769"},
+{kind:"gov",title:"Graduate Executive Trainee",org:"NLC India",pwbd:1,posts:"143 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-12-14",link:"https://www.freejobalert.com/articles/nlc-india-get-recruitment-2026-3078755"},
+{kind:"gov",title:"Various Posts of Isolated Categories",org:"RRB",pwbd:1,posts:"191 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-12-04",link:"https://www.freejobalert.com/articles/rrb-isolated-categories-recruitment-2026-cen-09-2026-apply-online-for-195-posts-3074732"},
+{kind:"gov",title:"Office Attendant",org:"Bihar Vidhan Sabha",pwbd:1,posts:"5 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-12-06",link:"https://www.freejobalert.com/articles/bihar-vidhan-sabha-office-attendant-recruitment-2026-3078403"},
+{kind:"gov",title:"Junior Secretariat Assistant",org:"Bihar Vidhan Sabha",pwbd:1,posts:"15 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-12-06",link:"https://www.freejobalert.com/articles/bihar-vidhan-sabha-junior-secretariat-assistant-recruitment-2026-3078393"},
+{kind:"gov",title:"Junior Court Attendant",org:"Supreme Court of India",pwbd:1,posts:"130 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-11-25",link:"https://www.freejobalert.com/articles/supreme-court-of-india-junior-court-attendant-recruitment-2026-3073990"},
+{kind:"gov",title:"Accounts Officer, Accountant and Programmer",org:"NIHFW",pwbd:1,posts:"9 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-11-30",link:"https://www.freejobalert.com/articles/nihfw-recruitment-2026-accountant-accounts-officer-3078058"},
+{kind:"gov",title:"Assistant, Block Assistant and More",org:"JSHPS",pwbd:1,posts:"637 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-12-04",link:"https://www.freejobalert.com/articles/jshps-recruitment-2026-apply-online-for-637-assistant-deo-and-more-posts-3077868"},
+{kind:"gov",title:"Technician, Technical Assistant and More",org:"SCL",pwbd:1,posts:"83 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-11-30",link:"https://www.freejobalert.com/articles/scl-recruitment-2026-short-notice-apply-online-for-83-technician-technical-assistant-and-more-posts-3074836"},
+{kind:"gov",title:"Assistant Town Planner, Junior Engineer, Draftsman",org:"KEA",pwbd:1,posts:"187 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-11-26",link:"https://www.freejobalert.com/articles/kea-recruitment-2026-apply-online-for-187-junior-engineer-assistant-town-planner-and-more-posts-3077720"},
+{kind:"gov",title:"Public Distribution System Dealer",org:"Collectorate Begusarai",pwbd:1,posts:"73 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-11-30",link:"https://www.freejobalert.com/articles/collectorate-begusarai-public-distribution-system-recruitment-2026-3077627"},
+{kind:"gov",title:"Stenographer Grade-III",org:"District Court Ramanagara",pwbd:1,posts:"3 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-11-30",link:"https://www.freejobalert.com/articles/ramanagara-district-court-stenographer-recruitment-2026-3077487"},
+{kind:"gov",title:"Journeyman & Driver (Vehicle)",org:"GRSE",pwbd:1,posts:"58 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-11-28",link:"https://www.freejobalert.com/articles/grse-recruitment-2026-apply-online-for-58-journeyman-driver-posts-3077222"},
+{kind:"gov",title:"Junior Assistant, Junior Technician",org:"IIITM Gwalior",pwbd:1,posts:"13 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-11-25",link:"https://www.freejobalert.com/articles/iiitm-gwalior-non-teaching-recruitment-2026-3077218"},
+{kind:"gov",title:"Mandal Planning and Statistical Officers / Assistant Statistical Officers",org:"TGPSC",pwbd:1,posts:"102 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-11-27",link:"https://www.freejobalert.com/articles/tgpsc-mpso-aso-recruitment-2026-3076747"},
+{kind:"gov",title:"Junior Superintendent, Junior Engineer",org:"IIIT Pune",pwbd:1,posts:"8 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-11-28",link:"https://www.freejobalert.com/articles/iiit-pune-non-teaching-recruitment-2026-apply-online-for-8-junior-superintendent-junior-engineer-posts-3076694"},
+{kind:"gov",title:"Diploma (Technician) Apprentice",org:"TNPDCL",pwbd:1,posts:"500 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-11-28",link:"https://www.freejobalert.com/articles/tnpdcl-diploma-apprentice-recruitment-2026-3076668"},
+{kind:"gov",title:"Typist",org:"Vellore District",pwbd:1,posts:"1 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-11-26",link:"https://www.freejobalert.com/articles/vellore-district-typist-recruitment-2026-3076326"},
+{kind:"gov",title:"Junior Engineer (Civil)",org:"JKSSB",pwbd:1,posts:"458 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-12-29",link:"https://www.freejobalert.com/articles/jkssb-junior-engineer-civil-recruitment-2026-3076234"},
+{kind:"gov",title:"Technical Assistant, EOT Crane Operator and More",org:"GSL",pwbd:1,posts:"91 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-11-27",link:"https://www.freejobalert.com/articles/goa-shipyard-limited-non-executive-recruitment-2026-3075885"},
+{kind:"gov",title:"Laboratory Technician",org:"AIIMS Rajkot",pwbd:1,posts:"1 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-11-30",link:"https://www.freejobalert.com/articles/aiims-rajkot-laboratory-technician-recruitment-2026-apply-online-3075875"},
+{kind:"gov",title:"Laboratory Technician, MTS",org:"AIIMS Rajkot",pwbd:1,posts:"2 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-11-30",link:"https://www.freejobalert.com/articles/aiims-rajkot-recruitment-2026-apply-online-for-2-laboratory-technician-mts-posts-3075868"},
+{kind:"gov",title:"Samiksha Adhikari, ARO, Care Taker and More",org:"UPPSC",pwbd:1,posts:"501 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-11-26",link:"https://www.freejobalert.com/articles/uppsc-ro-aro-recruitment-2026-3075713"},
+{kind:"gov",title:"Driver, Technician and More",org:"LAHDC SSRB",pwbd:1,posts:"216 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-11-27",link:"https://www.freejobalert.com/articles/lahdc-ssrb-recruitment-2026-3075188"},
+{kind:"gov",title:"Junior Assistant, Class-IV and More",org:"LAHDC KSSRB",pwbd:1,posts:"181 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-11-27",link:"https://www.freejobalert.com/articles/lahdc-kssrb-recruitment-2026-apply-online-for-181-junior-assistant-class-iv-and-more-posts-3074911"},
+{kind:"gov",title:"Act Apprentice",org:"RRC North Western Railway",pwbd:1,posts:"2008 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-11-22",link:"https://www.freejobalert.com/articles/rrc-north-western-railway-act-apprentice-recruitment-2026-3074741"},
+{kind:"gov",title:"Multi Tasking Staff (MTS)",org:"APSSB",pwbd:1,posts:"93 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-11-23",link:"https://www.freejobalert.com/articles/apssb-mts-recruitment-2026-3073601"},
+{kind:"gov",title:"Court Assistant",org:"Supreme Court of India",pwbd:1,posts:"15 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-11-24",link:"https://www.freejobalert.com/articles/supreme-court-of-india-court-assistant-recruitment-2026-apply-online-for-15-posts-3073241"},
+{kind:"gov",title:"Junior Engineer, Electrician and More",org:"UPSSSC",pwbd:1,posts:"380 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-11-27",link:"https://www.freejobalert.com/articles/upsssc-je-electrical-recruitment-2026-3072943"},
+{kind:"gov",title:"Technician",org:"UKSSSC",pwbd:1,posts:"78 कुल पोस्ट (इनमें PwBD आरक्षित)",last:"2026-11-25",link:"https://www.freejobalert.com/articles/uksssc-technician-recruitment-2026-apply-online-for-78-posts-3071437"}
+];
+var BEN=[
+{t:"UDID / Swavlamban कार्ड",d:"दिव्यांग प्रमाणपत्र और कार्ड की आधिकारिक साइट।",l:"https://www.swavlambancard.gov.in"},
+{t:"दिव्यांगजन सशक्तिकरण विभाग (DEPwD)",d:"केंद्र सरकार की योजनाओं और नई घोषणाओं के लिए।",l:"https://disabilityaffairs.gov.in"},
+{t:"National Career Service",d:"दिव्यांगजनों के लिए जॉब पोर्टल।",l:"https://www.ncs.gov.in"}
+];
+document.getElementById("nm").textContent=NAME;
+document.getElementById("upd").textContent=UPDATED;
+var TABS=[["gov","सरकारी जॉब (ऑनलाइन)"],["offline","ऑफलाइन सरकारी जॉब"],["private","प्राइवेट जॉब"]];
+var cur="gov";
+function ok(j){return j.pwbd>0&&!BLOCK.test(j.title+" "+j.org)}
+function days(d){var t=new Date(d+"T23:59:59+05:30")-new Date();return Math.ceil(t/864e5)}
+function esc(s){var e=document.createElement("div");e.textContent=s;return e.innerHTML}
+function draw(){
+ var q=document.getElementById("q").value.toLowerCase();
+ var tb=document.getElementById("tabs");tb.innerHTML="";
+ TABS.forEach(function(t){
+  var n=JOBS.filter(function(j){return j.kind===t[0]&&ok(j)}).length;
+  var b=document.createElement("button");b.className="tab"+(cur===t[0]?" on":"");
+  b.innerHTML=esc(t[1])+" <small>("+n+")</small>";
+  b.onclick=function(){cur=t[0];draw()};tb.appendChild(b)});
+ var L=JOBS.filter(function(j){return j.kind===cur&&ok(j)&&(j.title+j.org).toLowerCase().indexOf(q)>-1})
+  .sort(function(a,b){return a.last<b.last?-1:1});
+ var h="";
+ L.forEach(function(j){
+  var d=days(j.last);
+  if(d<0)return;
+  h+='<div class="job"><h3>'+esc(j.title)+'</h3><div class="row"><span>'+esc(j.org)+'</span><span class="pill">PwBD वैकेंसी: '+esc(j.posts)+'</span><span class="dl">आखिरी तारीख: '+esc(j.last)+' ('+d+' दिन बाकी)</span></div>'+(j.note?'<div class="note">'+esc(j.note)+'</div>':'')+'<a class="btn" href="'+esc(j.link)+'" target="_blank" rel="noopener">नोटिफिकेशन / Apply</a></div>'});
+ document.getElementById("list").innerHTML=h||'<div class="empty">इस सेक्शन में अभी कोई जॉब नहीं है जिसमें PwBD वैकेंसी हो।</div>';
+}
+document.getElementById("q").oninput=draw;
+// jobs.json से लाइव डेटा लोड करो (हर 30 मिनट में बॉट इसे अपडेट करता है)
+function loadLive(){
+ fetch("jobs.json?t="+Date.now()).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(d){
+  if(d&&d.jobs&&d.jobs.length){
+   var keep=JOBS.filter(function(j){return j.manual});
+   JOBS=d.jobs.concat(keep);
+   if(d.updated){var t=new Date(d.updated);document.getElementById("upd").textContent=t.toLocaleString("en-IN",{dateStyle:"medium",timeStyle:"short"})}
+   draw();
+  }
+ }).catch(function(){});
+}
+loadLive();
+setInterval(loadLive,300000);
+document.getElementById("ben").innerHTML=BEN.map(function(b){return '<div class="ben"><b>'+esc(b.t)+'</b><br>'+esc(b.d)+'<br><a href="'+esc(b.l)+'" target="_blank" rel="noopener">आधिकारिक साइट खोलें</a></div>'}).join("");
+draw();
+</script>
+</body>
+</html>
