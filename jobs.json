@@ -1,13 +1,31 @@
 {
- "updated": "2026-11-26T11:45:00.049674Z",
+ "updated": "2026-11-26T12:54:46.564249Z",
  "jobs": [
   {
    "kind": "gov",
+   "title": "Trainee Engineer",
+   "org": "BEL",
+   "posts": "49 कुल पोस्ट (इनमें PwBD आरक्षित)",
+   "last": "2026-12-10",
+   "link": "https://www.freejobalert.com/articles/bel-trainee-engineer-recruitment-2026-3085027",
+   "pwbd": 1
+  },
+  {
+   "kind": "gov",
    "title": "Junior Research Fellow",
-   "org": "NIT Nagaland",
+   "org": "IIT Indore",
    "posts": "1 कुल पोस्ट (इनमें PwBD आरक्षित)",
-   "last": "2026-12-16",
-   "link": "https://www.freejobalert.com/articles/nit-nagaland-junior-research-fellow-jrf-recruitment-2026-3084951",
+   "last": "2026-12-15",
+   "link": "https://www.freejobalert.com/articles/iit-indore-junior-research-fellow-jrf-chemistry-recruitment-2026-3084988",
+   "pwbd": 1
+  },
+  {
+   "kind": "gov",
+   "title": "Data Engineer",
+   "org": "DUK",
+   "posts": "1 कुल पोस्ट (इनमें PwBD आरक्षित)",
+   "last": "2026-12-10",
+   "link": "https://www.freejobalert.com/articles/duk-data-engineer-recruitment-2026-3084984",
    "pwbd": 1
   },
   {
@@ -26,42 +44,6 @@
    "posts": "1 कुल पोस्ट (इनमें PwBD आरक्षित)",
    "last": "2026-12-15",
    "link": "https://www.freejobalert.com/articles/tmc-senior-resident-orthopedic-oncology-recruitment-2026-3084941",
-   "pwbd": 1
-  },
-  {
-   "kind": "gov",
-   "title": "One Year Fellow",
-   "org": "HBCHRC",
-   "posts": "1 कुल पोस्ट (इनमें PwBD आरक्षित)",
-   "last": "2026-12-18",
-   "link": "https://www.freejobalert.com/articles/hbchrc-one-year-fellow-recruitment-2026-3084937",
-   "pwbd": 1
-  },
-  {
-   "kind": "gov",
-   "title": "Teaching Personnel",
-   "org": "GBPUAT CABM",
-   "posts": "1 कुल पोस्ट (इनमें PwBD आरक्षित)",
-   "last": "2026-12-02",
-   "link": "https://www.freejobalert.com/articles/gbpuat-cabm-teaching-personnel-recruitment-2026-3084920",
-   "pwbd": 1
-  },
-  {
-   "kind": "gov",
-   "title": "Project Associate-I",
-   "org": "IIT Jammu",
-   "posts": "1 कुल पोस्ट (इनमें PwBD आरक्षित)",
-   "last": "2026-12-09",
-   "link": "https://www.freejobalert.com/articles/iit-jammu-project-associate-i-pa-i-recruitment-2026-3084913",
-   "pwbd": 1
-  },
-  {
-   "kind": "gov",
-   "title": "Project Associate – I (PAT-I)",
-   "org": "CSIR-CFTRI",
-   "posts": "1 कुल पोस्ट (इनमें PwBD आरक्षित)",
-   "last": "2026-12-12",
-   "link": "https://www.freejobalert.com/articles/csir-cftri-project-associate-i-pat-i-recruitment-2026-3084902",
    "pwbd": 1
   },
   {
